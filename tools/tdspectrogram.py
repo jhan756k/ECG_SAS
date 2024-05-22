@@ -4,7 +4,6 @@ import numpy as np
 import matplotlib
 import scipy
 from scipy.signal import spectrogram
-import os
 
 matplotlib.use('Agg')
 
@@ -22,8 +21,6 @@ def spec(csv_file):
 
     # Take natural log of the magnitude square of each spectrogram
     Sxx = np.log(np.abs(Sxx)**2 + 1e-10)
-
-    filename = os.path.splitext(os.path.basename(csv_file))[0]
 
     matplotlib.pyplot.figure(figsize=(7/3, 7/3), facecolor='none', dpi=96)
     matplotlib.pyplot.pcolormesh(t, f, Sxx)
