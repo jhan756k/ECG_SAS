@@ -1,7 +1,6 @@
 import csv
 
-def refine():
-    file_path = 'testdata.csv'
+def refine(file_path: str):
     with open(file_path, 'r') as file:
         reader = csv.reader(file)
         rows = list(reader)

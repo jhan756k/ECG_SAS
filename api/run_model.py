@@ -1,32 +1,22 @@
-from fastapi import APIRouter, BackgroundTasks
+from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-import pandas as pd
-import os 
+import os
 from tools import tdrefine, tdspectrogram
 from models.ai import model
 
 router = APIRouter()
-results = {}
 
 @router.post("/run_model/{file_location}")
-async def run_model(file_location: str, background_tasks: BackgroundTasks):
+async def run_model(file_location: str):
     try:
-        df = pd.read_csv(f"temp_files/{file_location}")
-        background_tasks.add_task(process_file, f"temp_files/{file_location}", df)
+        file_location = f"temp_files/{file_location}"
+        tdrefine.refine(f"{file_location}.csv")
+        tdspectrogram.spec(f"{file_location}.csv")
+        prediction = model.predict(f"{file_location}.csv.png")
+        
+        os.remove(f"{file_location}.csv.png")
+        os.remove(f"{file_location}.csv")
 
-        return JSONResponse(content={"message": "Model is running in the background"})
+        return JSONResponse(content={"message": "model run successfully", "prediction": str(prediction[0][0])})
     except Exception as e:
         return JSONResponse(content={"message": str(e)}, status_code=500)
-
-def process_file(file_location: str, dataframe: pd.DataFrame):
-    try:
-        tdrefine.refine(dataframe)
-        tdspectrogram.spec(file_location)
-        prediction = model.predict(f"{file_location}.png")
-        results[file_location] = prediction.tolist()
-        
-        os.remove(file_location)
-        os.remove(f"{file_location}.png")
-        os.remove(f"{file_location}.csv")
-    except Exception as e:
-        print(f"Error processing file: {e}")

@@ -1,9 +1,12 @@
+import matplotlib.pyplot
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+import matplotlib
 import scipy
 from scipy.signal import spectrogram
 import os
+
+matplotlib.use('Agg')
 
 def spec(csv_file):
     df = pd.read_csv(csv_file)
@@ -22,9 +25,9 @@ def spec(csv_file):
 
     filename = os.path.splitext(os.path.basename(csv_file))[0]
 
-    plt.figure(figsize=(7/3, 7/3), facecolor='none', dpi=96)
-    plt.pcolormesh(t, f, Sxx)
-    plt.axis('off')
-    output_image_path = f"temp_files/{csv_file}.png"
-    plt.savefig(output_image_path, transparent=True, bbox_inches=0, pad_inches=0)
-    plt.close()
+    matplotlib.pyplot.figure(figsize=(7/3, 7/3), facecolor='none', dpi=96)
+    matplotlib.pyplot.pcolormesh(t, f, Sxx)
+    matplotlib.pyplot.axis('off')
+    output_image_path = f"{csv_file}.png"
+    matplotlib.pyplot.savefig(output_image_path, transparent=True, bbox_inches=0, pad_inches=0)
+    matplotlib.pyplot.close()
