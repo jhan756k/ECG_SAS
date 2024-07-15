@@ -17,6 +17,6 @@ async def run_model(file_location: str):
         os.remove(f"{file_location}.csv.png")
         os.remove(f"{file_location}.csv")
 
-        return JSONResponse(content={"message": "model run successfully", "prediction": str(prediction[0][0])})
+        return JSONResponse(content={"message": "model run successfully", "prediction": str(prediction[0][0])}, status_code=200)
     except Exception as e:
         return JSONResponse(content={"message": str(e)}, status_code=500)
