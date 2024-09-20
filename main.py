@@ -12,8 +12,8 @@ from fastapi import FastAPI, File, UploadFile, APIRouter
 from fastapi.responses import JSONResponse
 
 # Check TensorFlow version
-if tf.__version__ != '2.11.0':
-    print(f"Warning: Current TensorFlow version is {tf.__version__}. Model was trained with 2.11.0.")
+if tf.__version__ != '2.12.0':
+    print(f"Warning: Current TensorFlow version is {tf.__version__}. Model was trained with 2.12.0.")
 
 matplotlib.use('Agg')
 
