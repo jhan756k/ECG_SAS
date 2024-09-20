@@ -10,6 +10,7 @@ import scipy
 from scipy.signal import spectrogram
 from fastapi import FastAPI, File, UploadFile, APIRouter
 from fastapi.responses import JSONResponse
+from starlette.middleware.cors import CORSMiddleware
 
 # Check TensorFlow version
 if tf.__version__ != '2.12.0':
@@ -118,6 +119,18 @@ async def run_model(file_location: str):
         return JSONResponse(content={"message": "model run successfully", "prediction": str(prediction[0][0])}, status_code=200)
     except Exception as e:
         return JSONResponse(content={"message": str(e)}, status_code=500)
+
+origins = [
+    "*"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 if __name__ == "__main__":
     import uvicorn
